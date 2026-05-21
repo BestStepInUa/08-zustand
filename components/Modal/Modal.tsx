@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import css from './InterceptionModal.module.css'
+import css from './Modal.module.css'
 
 type ModalProps = {
 	onClose: () => void

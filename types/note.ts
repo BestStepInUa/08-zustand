@@ -7,4 +7,8 @@ export interface Note {
 	tag: 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping'
 }
 
-
+export interface CreateNoteDto {
+	title: string
+	content: string
+	tag: Note['tag']
+}

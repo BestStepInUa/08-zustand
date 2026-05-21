@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import type { Note } from '@/types/note'
+import type { Note, CreateNoteDto } from '@/types/note'
 
 interface NotesResponse {
 	notes: Note[]
@@ -43,11 +43,7 @@ export const fetchNoteById = async (id: string): Promise<Note> => {
 	return data
 }
 
-export const createNote = async (noteData: {
-	title: string
-	content: string
-	tag: Note['tag']
-}): Promise<Note> => {
+export const createNote = async (noteData: CreateNoteDto): Promise<Note> => {
 	const { data } = await api.post<Note>('/notes', noteData)
 
 	return data

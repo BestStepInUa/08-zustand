@@ -5,11 +5,11 @@ import { fetchNoteById } from '@/lib/api'
 import NoteDetailsClient from './NoteDetails.client'
 import { ogDescriptionTruncate } from '@/app/helpers/ogDescriptionTruncate'
 
-type Props = {
+type NoteDetailsProps = {
 	params: Promise<{ id: string }>
 }
 
-export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: NoteDetailsProps): Promise<Metadata> => {
 	const { id } = await params
 	const note = await fetchNoteById(id)
 
@@ -34,7 +34,7 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
 	}
 }
 
-export default async function NoteDetails({ params }: Props) {
+export default async function NoteDetails({ params }: NoteDetailsProps) {
 	const { id } = await params
 	const queryClient = new QueryClient()
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { NO_INDEX_PAGE } from '@/constants/seo.constants'
 
-import css from './NotFound.module.css'
+import css from './Home.module.css'
 
 export const metadata: Metadata = {
 	title: 'Not found',
