@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import * as Yup from 'yup'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 
 import { createNote } from '@/lib/api'
 
@@ -36,6 +37,7 @@ interface FormData {
 
 export default function NoteForm() {
 	const router = useRouter()
+	const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
 
 	const draft = useNoteDraftStore(selectDraft)
 	const setDraft = useNoteDraftStore(selectSetDraft)
@@ -49,6 +51,10 @@ export default function NoteForm() {
 			...draft,
 			[name]: value,
 		})
+		// Clear error for this field when user starts typing
+		if (errors[name as keyof FormData]) {
+			setErrors((prev) => ({ ...prev, [name]: undefined }))
+		}
 	}
 
 	const queryClient = useQueryClient()
@@ -77,9 +83,19 @@ export default function NoteForm() {
 				abortEarly: false,
 			})
 
+			// Clear errors if validation passes
+			setErrors({})
 			mutation.mutate(values)
 		} catch (error) {
-			console.error(error)
+			if (error instanceof Yup.ValidationError) {
+				const formattedErrors: Partial<Record<keyof FormData, string>> = {}
+				error.inner.forEach((err) => {
+					if (err.path) {
+						formattedErrors[err.path as keyof FormData] = err.message
+					}
+				})
+				setErrors(formattedErrors)
+			}
 		}
 	}
 
@@ -93,8 +109,9 @@ export default function NoteForm() {
 					name='title'
 					defaultValue={draft?.title}
 					onChange={handleChange}
-					className={css.input}
+					className={`${css.input} ${errors.title ? css.errorInput : ''}`}
 				/>
+				{errors.title && <span className={css.error}>{errors.title}</span>}
 			</div>
 
 			<div className={css.formGroup}>
@@ -105,8 +122,9 @@ export default function NoteForm() {
 					defaultValue={draft?.content}
 					onChange={handleChange}
 					rows={8}
-					className={css.textarea}
+					className={`${css.textarea} ${errors.content ? css.errorInput : ''}`}
 				/>
+				{errors.content && <span className={css.error}>{errors.content}</span>}
 			</div>
 
 			<div className={css.formGroup}>
@@ -116,7 +134,7 @@ export default function NoteForm() {
 					name='tag'
 					defaultValue={draft?.tag || 'Todo'}
 					onChange={handleChange}
-					className={css.input}
+					className={`${css.input} ${errors.tag ? css.errorInput : ''}`}
 				>
 					<option value=''>Select a tag</option>
 					<option value='Todo'>Todo</option>
@@ -125,6 +143,7 @@ export default function NoteForm() {
 					<option value='Meeting'>Meeting</option>
 					<option value='Shopping'>Shopping</option>
 				</select>
+				{errors.tag && <span className={css.error}>{errors.tag}</span>}
 			</div>
 
 			<div className={css.actions}>
