@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
 
 import { fetchNoteById } from '@/lib/api'
-import InterceptionModal from '@/components/InterceptionModal'
+import Modal from '@/components/Modal'
 
 import css from './NotePreview.module.css'
 
@@ -33,7 +33,7 @@ export default function NotePreviewClient() {
 		: `Created at: ${note.createdAt}`
 
 	return (
-		<InterceptionModal onClose={close}>
+		<Modal onClose={close}>
 			<div className={css.container}>
 				<div className={css.item}>
 					<div className={css.header}>
@@ -47,7 +47,6 @@ export default function NotePreviewClient() {
 					Close
 				</button>
 			</div>
-		</InterceptionModal>
+		</Modal>
 	)
 }
-

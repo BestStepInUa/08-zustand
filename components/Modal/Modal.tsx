@@ -1,11 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
-import { createPortal } from 'react-dom'
+import css from './InterceptionModal.module.css'
 
-import css from './Modal.module.css'
-
-interface ModalProps {
+type ModalProps = {
 	onClose: () => void
 	children: React.ReactNode
 }
@@ -31,10 +29,10 @@ export default function Modal({ onClose, children }: ModalProps) {
 			document.body.style.overflow = ''
 		}
 	}, [onClose])
-	return createPortal(
-		<div className={css.backdrop} role='dialog' aria-modal='true' onClick={handleBackdropClick}>
+
+	return (
+		<div className={css.backdrop} onClick={handleBackdropClick}>
 			<div className={css.modal}>{children}</div>
-		</div>,
-		document.body,
+		</div>
 	)
 }

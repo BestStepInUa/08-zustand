@@ -7,13 +7,12 @@ import { useDebouncedCallback } from 'use-debounce'
 import { fetchNotes } from '@/lib/api'
 import SearchBox from '@/components/SearchBox'
 import Pagination from '@/components/Pagination'
-import NoteForm from '@/components/NoteForm'
-import Modal from '@/components/Modal'
 import NoteList from '@/components/NoteList'
 
 import { Note } from '@/types/note'
 
 import css from './NotesPage.module.css'
+import { useRouter } from 'next/navigation'
 
 type NotesClientProps = {
 	tag?: string
@@ -22,7 +21,8 @@ type NotesClientProps = {
 export default function NotesClient({ tag }: NotesClientProps) {
 	const [currentPage, setCurrentPage] = useState(1)
 	const [searchQuery, setSearchQuery] = useState('')
-	const [isModalOpen, setIsModalOpen] = useState(false)
+
+	const router = useRouter()
 
 	const { data } = useQuery<{ notes: Note[]; totalPages: number }, Error>({
 		queryKey: ['notes', searchQuery, tag, currentPage],
@@ -53,17 +53,12 @@ export default function NotesClient({ tag }: NotesClientProps) {
 				<button
 					className={css.button}
 					onClick={() => {
-						setIsModalOpen(true)
+						router.push('/notes/action/create')
 					}}
 				>
 					Create note +
 				</button>
 			</div>
-			{isModalOpen && (
-				<Modal onClose={() => setIsModalOpen(false)}>
-					<NoteForm onClose={() => setIsModalOpen(false)} />
-				</Modal>
-			)}
 			{notes.length > 0 && <NoteList notes={notes} />}
 		</div>
 	)

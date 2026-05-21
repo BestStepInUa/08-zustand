@@ -18,7 +18,7 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
 		description: note.content,
 		openGraph: {
 			type: 'article',
-			url: `process.env.NEXT_OG_APP_URL/notes/${id}` || `http://localhost:3000/notes/${id}`,
+			url: `${process.env.NEXT_OG_APP_URL}/notes/${id}` || `http://localhost:3000/notes/${id}`,
 			title: note.title,
 			description: ogDescriptionTruncate(note.content),
 			siteName: 'BestNotes App',

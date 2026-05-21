@@ -18,7 +18,7 @@ export const generateMetadata = async ({ params }: NotesProps): Promise<Metadata
 		openGraph: {
 			type: 'website',
 			url:
-				`process.env.NEXT_OG_APP_URL/notes/filter/${slug[0]}` ||
+				`${process.env.NEXT_OG_APP_URL}/notes/filter/${slug[0]}` ||
 				`http://localhost:3000/notes/filter/${slug[0]}`,
 			title: tag ? `Recent Notes | ${tag} ` : 'Recent Notes',
 			description: tag ? `A list of recent notes by filter: ${tag}` : 'A list of all recent notes.',
@@ -48,7 +48,7 @@ export default async function Notes({ params }: NotesProps) {
 
 	return (
 		<HydrationBoundary state={dehydrate(queryClient)}>
-			<NotesClient key={tag} tag={tag} />
+			<NotesClient tag={tag} />
 		</HydrationBoundary>
 	)
 }
