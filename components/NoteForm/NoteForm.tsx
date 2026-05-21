@@ -66,6 +66,7 @@ export default function NoteForm() {
 				queryKey: ['notes'],
 				exact: false,
 			})
+			router.refresh()
 			clearDraft()
 			router.back()
 		},
